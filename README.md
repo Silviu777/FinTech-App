@@ -1,2 +1,1 @@
-# FinTech-App
-v1
+# FinTech-App - v1
