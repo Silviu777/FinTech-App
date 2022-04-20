@@ -6,7 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "transactions")
@@ -26,7 +26,7 @@ public class Transaction {
 
     @Column(name = "currency")
     @Enumerated(EnumType.STRING)
-    private Currency currency;
+    private Currency currency;   // keep it or delete it?
 
     @Column(name = "description")
     private String description;
@@ -36,11 +36,11 @@ public class Transaction {
     private Account account;
 
     @Column(name = "transaction_date")
-    private LocalDate transactionDate;
+    private Date transactionDate;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
 
-
+    public Transaction(BigDecimal amount, Account account, Date date) {}
 }
