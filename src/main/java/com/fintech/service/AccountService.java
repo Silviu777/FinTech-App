@@ -11,10 +11,18 @@ import java.util.List;
 
 public interface AccountService {
 
+    List<Account> getAllAccounts();
+
     Account getAccount(Long id);
+
     Account openAccount(User user, AccountType accountType, Currency currency);
+
     void deposit(Long accountId, BigDecimal amount);
+
     void closeAccount(User user);
-    Account updateAccount(Account account);
+
+    void updateAccount(Account account);
+
     List<Transaction> viewAccountTransactions(Long accountId);
+
 }
