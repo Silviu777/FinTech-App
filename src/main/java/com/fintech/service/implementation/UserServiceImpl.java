@@ -39,6 +39,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Role findRoleName(Role role) {
+        Role selectedRole;
+
+        switch (role) {
+            case CLIENT:
+                selectedRole = Role.CLIENT;
+            case ADMIN:
+                selectedRole = Role.ADMIN;
+                break;
+            default:
+                selectedRole = Role.CLIENT;
+        }
+        return selectedRole;
+    }
+
+    @Override
     public boolean hasRole(User user, Role role) {
         return false; // to be reviewed!
     }

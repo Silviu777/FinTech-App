@@ -1,11 +1,18 @@
 package com.fintech.dto;
 
 import com.fintech.model.Account;
+import com.fintech.model.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDTO {
 
     private long id;
@@ -18,8 +25,6 @@ public class UserDTO {
 
     private String birthDate;
 
-    private List<Account> accounts; // display user's accounts - necessary?
-
     private String phoneNumber;
 
     private String address;
@@ -27,5 +32,7 @@ public class UserDTO {
     private String city;
 
     private String country;
+
+    private String emailAddress;
 
 }

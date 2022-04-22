@@ -12,6 +12,7 @@ import java.util.Date;
 @Table(name = "transactions")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter
 @Setter
 public class Transaction {
@@ -42,5 +43,7 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
 
-    public Transaction(BigDecimal amount, Account account, Date date) {}
+    public Transaction(BigDecimal amount, Account account, Date date) {
+
+    }
 }
