@@ -1,5 +1,6 @@
 package com.fintech.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fintech.model.Transaction;
 import com.fintech.model.enums.AccountType;
 import com.fintech.model.enums.Currency;
@@ -28,6 +29,7 @@ public class AccountDTO {
 
     private Currency currency;
 
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date dateOpened;
 
     private List<Transaction> transactionList;

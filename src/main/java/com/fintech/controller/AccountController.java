@@ -1,28 +1,38 @@
 package com.fintech.controller;
 
 import com.fintech.dto.AccountDTO;
+import com.fintech.mapper.AccountMapper;
+import com.fintech.model.Account;
 import com.fintech.service.AccountService;
-import org.modelmapper.ModelMapper;
+import com.fintech.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping("/api")
 public class AccountController {
 
     @Autowired
     private AccountService accountService;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private UserService userService;
 
-    @GetMapping
-    public List<AccountDTO> getAllAcounts() {
-        return accountService.getAllAccounts().stream().map(account -> modelMapper.map(account, AccountDTO.class)).collect(Collectors.toList());
+    @GetMapping("/accounts")
+    public ResponseEntity<List<AccountDTO>> getAllAcounts() {
+        return ResponseEntity.ok(AccountMapper.mapListToDto(accountService.getAllAccounts()));
+    }
+
+    @GetMapping("/account/{id}")
+    public ResponseEntity<AccountDTO> displayAccount(@PathVariable Long id) {
+        return ResponseEntity.ok(AccountMapper.mapToDto(accountService.getAccount(id)));
+    }
+
+    @PostMapping("/user/{id}/account")
+    public ResponseEntity<Account> createAccount(@PathVariable Long id, @RequestBody Account account) {
+        return ResponseEntity.ok(accountService.openAccount(userService.findById(id), account.getAccountType(), account.getCurrency()));
     }
 }

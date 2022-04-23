@@ -1,5 +1,6 @@
 package com.fintech.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fintech.model.enums.Currency;
 import com.fintech.model.enums.TransactionStatus;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class TransactionDTO {
 
     private String description;
 
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date transactionDate;
 
     private TransactionStatus status;

@@ -15,6 +15,8 @@ public interface AccountService {
 
     Account getAccount(Long id);
 
+    Account getAccountByUsername(String username);
+
     Account openAccount(User user, AccountType accountType, Currency currency);
 
     void deposit(Long accountId, BigDecimal amount);

@@ -21,7 +21,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     List<Account> findAccountByCurrency(Currency currency);
 
-    Account findAccountByOwner(User owner); // needed?
+    Account findAccountByOwner(String owner);
 
     Account findAccountByOwnerAndAccountType(User owner, AccountType accountType);
 

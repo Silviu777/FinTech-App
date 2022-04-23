@@ -33,6 +33,10 @@ public class TransactionServiceImpl implements TransactionService {
     public void transfer(Account sender, Account receiver, BigDecimal amount) {
         Transaction transaction = new Transaction();
 
+        if (sender.equals(receiver)) {
+            throw new RuntimeException("You cannot send funds to your own account!");
+        }
+
         if (sender.getBalance().compareTo(amount) < 0) {
             throw new RuntimeException("You do not have enough funds in your account to complete the transfer!");
         }
@@ -45,13 +49,14 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setDescription("Transfer from " + sender.getOwner().getUserName() + " to " + receiver.getOwner().getUserName()); // display account id/iban or keep the user?
         transaction.setTransactionDate(new Date());
         transaction.setStatus(TransactionStatus.PENDING);
-
-        transactionRepository.save(transaction);
+        saveTransaction(transaction);
 
         sender.setBalance(sender.getBalance().subtract(amount));
         accountService.updateAccount(sender);
         receiver.setBalance(receiver.getBalance().add(amount));
         accountService.updateAccount(receiver);
+
+        verifyTransfer(transaction); // TO BE REVIEWED!
     }
 
     @Override

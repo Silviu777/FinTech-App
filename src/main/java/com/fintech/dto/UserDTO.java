@@ -1,5 +1,6 @@
 package com.fintech.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fintech.model.Account;
 import com.fintech.model.User;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class UserDTO {
 
     private String userName;
 
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private String birthDate;
 
     private String phoneNumber;

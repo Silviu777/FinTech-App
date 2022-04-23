@@ -3,6 +3,9 @@ package com.fintech.mapper;
 import com.fintech.dto.AccountDTO;
 import com.fintech.model.Account;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class AccountMapper {
 
     public static AccountDTO mapToDto(Account account) {
@@ -37,5 +40,9 @@ public class AccountMapper {
                 .iban(accountDTO.getIban())
                 .transactionList(accountDTO.getTransactionList())
                 .build();
+    }
+
+    public static List<AccountDTO> mapListToDto(List<Account> accounts) {
+            return accounts.stream().map(AccountMapper::mapToDto).collect(Collectors.toList());
     }
 }
