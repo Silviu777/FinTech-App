@@ -17,6 +17,8 @@ public interface AccountService {
 
     Account getAccountByUsername(String username);
 
+    Account getAccountByIBAN(String iban);
+
     Account openAccount(User user, AccountType accountType, Currency currency);
 
     void deposit(Long accountId, BigDecimal amount);

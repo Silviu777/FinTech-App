@@ -43,6 +43,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Account getAccountByIBAN(String iban) {
+        return accountRepository.getAccountByIban(iban);
+    }
+
+    @Override
     public Account openAccount(User user, AccountType accountType, Currency currency) {
         Account account = new Account();
         account.setOwner(user);

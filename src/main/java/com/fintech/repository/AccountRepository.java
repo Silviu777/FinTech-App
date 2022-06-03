@@ -5,19 +5,20 @@ import com.fintech.model.User;
 import com.fintech.model.enums.AccountType;
 import com.fintech.model.enums.Currency;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
+@Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
     List<Account> findAll();
 
-    Account findAccountByAccountType(AccountType type);
-
     Account findAccountById(Long id);
 
-    Optional<Account> findAccountByIban(String iban);
+    Account getAccountByIban(String iban);
+
+    Account findAccountByAccountType(AccountType type);
 
     List<Account> findAccountByCurrency(Currency currency);
 

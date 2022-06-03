@@ -1,6 +1,7 @@
 package com.fintech.model;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 
@@ -28,6 +29,7 @@ public class User {
     private String userName;
 
     @Column(name = "birth_date")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private String birthDate;
 
     @Column(name = "email_address")

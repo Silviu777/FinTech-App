@@ -1,8 +1,10 @@
 package com.fintech.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fintech.model.enums.Currency;
 import com.fintech.model.enums.TransactionStatus;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -18,7 +20,7 @@ import java.util.Date;
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -34,9 +36,12 @@ public class Transaction {
 
     @ManyToOne(fetch = FetchType.EAGER) // review!!
     @JoinColumn(name = "account_id")
+    @JsonIgnore()
     private Account account;
 
     @Column(name = "transaction_date")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @Temporal(TemporalType.DATE)
     private Date transactionDate;
 
     @Column(name = "status")

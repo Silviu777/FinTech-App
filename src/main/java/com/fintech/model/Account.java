@@ -3,6 +3,7 @@ package com.fintech.model;
 import com.fintech.model.enums.AccountType;
 import com.fintech.model.enums.Currency;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -27,7 +28,7 @@ public class Account {
     private BigDecimal balance;
 
     @Column(name = "iban")
-    private String iban; // or int accountNumber?
+    private String iban;
 
     @Column(name = "interest_rate")
     private double interestRate;
@@ -43,6 +44,7 @@ public class Account {
     private User owner;
 
     @Column(name = "date_opened")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date dateOpened;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

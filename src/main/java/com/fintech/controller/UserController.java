@@ -37,7 +37,7 @@ public class UserController {
         }
         // TO PROVIDE Role --> API Security + Roles specification
 
-        userService.createUser(newUser, userService.findRoleName(role));
+        userService.saveUser(newUser); // instead of createUser(User usr, Role rl) !! -- delete this method
         URI location = ServletUriComponentsBuilder.fromCurrentServletMapping()
                 .path("/api/user/{id}").build()
                 .expand(newUser.getId())

@@ -1,11 +1,10 @@
 package com.fintech.service;
 
-import com.fintech.model.Account;
+import com.fintech.dto.TransactionRequestDTO;
 import com.fintech.model.Transaction;
 import com.fintech.model.enums.Currency;
 import com.fintech.model.enums.TransactionStatus;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface TransactionService {
@@ -14,7 +13,7 @@ public interface TransactionService {
 
     void saveTransaction(Transaction transaction);
 
-    void transfer(Account sender, Account receiver, BigDecimal amount);
+    void transfer(TransactionRequestDTO transaction);
 
     void verifyTransfer(Transaction transaction); // for setting VALIDATED Status -> to be reviewed
 

@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Role findRoleName(Role role) {
+    public Role findRoleName(Role role) { // delete? wait for integration of auth0
         Role selectedRole;
 
         switch (role) {
