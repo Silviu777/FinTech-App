@@ -1,6 +1,6 @@
 package com.fintech.service.implementation;
 
-import com.fintech.dto.TransactionRequestDTO;
+import com.fintech.dto.TransactionRequestDto;
 import com.fintech.model.Account;
 import com.fintech.model.Transaction;
 import com.fintech.model.enums.Currency;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void transfer(TransactionRequestDTO transactionRequest) {
+    public void transfer(TransactionRequestDto transactionRequest) {
 
 //        if (sender.equals(receiver)) {
 //            throw new RuntimeException("You cannot send funds to your own account!");
@@ -52,6 +51,7 @@ public class TransactionServiceImpl implements TransactionService {
         Account sender = accountRepository.getAccountByIban(senderIban);
         Account receiver = accountRepository.getAccountByIban(receiverIban);
         BigDecimal amount = transactionRequest.getAmount();
+        Currency currency = transactionRequest.getCurrency();
         String description = transactionRequest.getDescription();
 
         if (sender.getBalance().compareTo(amount) < 0 || amount.compareTo(BigDecimal.ZERO) == 0) {
@@ -64,22 +64,30 @@ public class TransactionServiceImpl implements TransactionService {
         accountService.updateAccount(receiver);
 
         Transaction transaction = new Transaction();
-        transaction.setDescription(description);
         transaction.setStatus(TransactionStatus.PENDING);
         transaction.setAccount(sender);
         transaction.setAmount(amount);
+        transaction.setCurrency(currency);
+        transaction.setDescription(description);
         transaction.setTransactionDate(new Date());
         saveTransaction(transaction);
 
-        verifyTransfer(transaction); // TO BE REVIEWED!
+        verifyTransfer(transaction);
 
     }
 
     @Override
     public void verifyTransfer(Transaction transaction) {
-        if (findTransactionById(transaction.getId())) {
+        if (findTransactionById(transaction.getId()) && transaction.getDescription() != null) {
             transaction.setStatus(TransactionStatus.VERIFIED);
+            saveTransaction(transaction);
         }
+
+        else if (transaction.getDescription() == null) {
+            transaction.setStatus(TransactionStatus.PENDING);
+            saveTransaction(transaction);
+        }
+
         else {
             transaction.setStatus(TransactionStatus.REJECTED);
         }

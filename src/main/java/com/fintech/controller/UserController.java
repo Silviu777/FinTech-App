@@ -1,6 +1,6 @@
 package com.fintech.controller;
 
-import com.fintech.dto.UserDTO;
+import com.fintech.dto.UserDto;
 import com.fintech.mapper.UserMapper;
 import com.fintech.model.User;
 import com.fintech.model.enums.Role;
@@ -24,7 +24,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> displayUserById(@PathVariable Long id) {
+    public ResponseEntity<UserDto> displayUserById(@PathVariable Long id) {
 
         return ResponseEntity.ok(UserMapper.mapToDto(userService.findById(id)));
     }
@@ -35,7 +35,6 @@ public class UserController {
         if (userService.checkEmailAddress(newUser.getEmailAddress())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "An user is already registered with this email address! Please log in with the existing credentials or provide another email address.");
         }
-        // TO PROVIDE Role --> API Security + Roles specification
 
         userService.saveUser(newUser); // instead of createUser(User usr, Role rl) !! -- delete this method
         URI location = ServletUriComponentsBuilder.fromCurrentServletMapping()

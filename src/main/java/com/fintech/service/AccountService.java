@@ -1,5 +1,7 @@
 package com.fintech.service;
 
+import com.fintech.dto.NewAccountDtoInput;
+import com.fintech.dto.NewAccountDtoOutput;
 import com.fintech.model.Account;
 import com.fintech.model.Transaction;
 import com.fintech.model.User;
@@ -19,7 +21,7 @@ public interface AccountService {
 
     Account getAccountByIBAN(String iban);
 
-    Account openAccount(User user, AccountType accountType, Currency currency);
+    NewAccountDtoOutput openAccount(NewAccountDtoInput newAccount, String username);
 
     void deposit(Long accountId, BigDecimal amount);
 

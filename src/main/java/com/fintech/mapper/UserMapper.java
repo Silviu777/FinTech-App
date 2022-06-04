@@ -1,18 +1,18 @@
 package com.fintech.mapper;
 
-import com.fintech.dto.UserDTO;
+import com.fintech.dto.UserDto;
 import com.fintech.model.User;
 
 
 public class UserMapper {
 
-    public static UserDTO mapToDto(User user) {
+    public static UserDto mapToDto(User user) {
 
         if (user == null) {
             return null;
         }
 
-        return UserDTO.builder()
+        return UserDto.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
@@ -27,7 +27,7 @@ public class UserMapper {
 
     }
 
-    public static User mapToEntity(UserDTO userDTO) {
+    public static User mapToEntity(UserDto userDTO) {
 
         if (userDTO == null) {
             return null;

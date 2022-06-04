@@ -1,6 +1,6 @@
 package com.fintech.service;
 
-import com.fintech.dto.TransactionRequestDTO;
+import com.fintech.dto.TransactionRequestDto;
 import com.fintech.model.Transaction;
 import com.fintech.model.enums.Currency;
 import com.fintech.model.enums.TransactionStatus;
@@ -13,7 +13,7 @@ public interface TransactionService {
 
     void saveTransaction(Transaction transaction);
 
-    void transfer(TransactionRequestDTO transaction);
+    void transfer(TransactionRequestDto transaction);
 
     void verifyTransfer(Transaction transaction); // for setting VALIDATED Status -> to be reviewed
 

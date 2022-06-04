@@ -6,17 +6,11 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class TransactionRequestDTO {
-
-    private String senderIban;
-
-    private String receiverIban;
+public class DepositAmountDto {
 
     private BigDecimal amount;
-
-    private String description;
 
 }
