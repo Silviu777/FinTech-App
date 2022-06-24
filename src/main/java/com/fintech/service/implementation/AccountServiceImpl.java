@@ -67,7 +67,7 @@ public class AccountServiceImpl implements AccountService {
             throw new NegativeBalance();
         }
 
-        User user = userRepository.findUserByUserName(username);
+        User user = userRepository.findUserByUserName(username).orElseThrow();
         Account newAccount = new Account();
         String accountIban = createIban();
 
