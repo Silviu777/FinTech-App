@@ -1,16 +1,11 @@
 package com.fintech.model;
 
-import com.fintech.appuser.UserRole;
+import com.fintech.model.enums.Role;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.Collection;
-import java.util.Collections;
 
 @Entity
 @Table(name = "users")
@@ -58,13 +53,13 @@ public class User {
     private String country;
 
     @Enumerated
-    private UserRole role;
+    private Role role;
 
     private boolean enabled;
 
     private Instant created;
 
-    public User(String firstName, String lastName, String email, String password, UserRole role) {
+    public User(String firstName, String lastName, String email, String password, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = email;
