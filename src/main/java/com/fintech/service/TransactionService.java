@@ -15,7 +15,7 @@ public interface TransactionService {
 
     void transfer(TransactionRequestDto transaction);
 
-    void verifyTransfer(Transaction transaction); // for setting VALIDATED Status -> to be reviewed
+    void verifyTransfer(Transaction transaction);
 
     List<Transaction> viewTransactionsByStatus(TransactionStatus status);
 

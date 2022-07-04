@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUsername(String username) {
-        return userRepository.findUserByUserName(username).orElseThrow();
+        return userRepository.findUserByUsername(username).orElseThrow();
     }
 
     @Override
@@ -43,8 +43,7 @@ public class UserServiceImpl implements UserService {
         Role selectedRole;
 
         switch (role) {
-            case CLIENT:
-                selectedRole = Role.CLIENT;
+
             case ADMIN:
                 selectedRole = Role.ADMIN;
                 break;
@@ -73,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
-        existingUser.setUserName(user.getUserName());
+        existingUser.setUsername(user.getUsername());
         existingUser.setBirthDate(user.getBirthDate());
         existingUser.setEmailAddress(user.getEmailAddress());
         existingUser.setPhoneNumber(user.getPhoneNumber());

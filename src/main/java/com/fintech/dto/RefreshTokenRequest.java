@@ -15,4 +15,5 @@ public class RefreshTokenRequest {
     private String refreshToken;
 
     private String username;
+
 }

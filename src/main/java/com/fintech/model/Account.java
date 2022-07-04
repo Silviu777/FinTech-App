@@ -50,7 +50,4 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transaction> transactionList;
 
-    public Account(User user, AccountType accountType, Currency currency, BigDecimal balance) {
-
-    }
 }

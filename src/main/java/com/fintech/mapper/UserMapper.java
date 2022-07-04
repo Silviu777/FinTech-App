@@ -16,7 +16,7 @@ public class UserMapper {
                 .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
-                .userName(user.getUserName())
+                .userName(user.getUsername())
                 .address(user.getAddress())
                 .city(user.getCity())
                 .country(user.getCountry())
@@ -37,7 +37,7 @@ public class UserMapper {
                 .id(userDTO.getId())
                 .firstName(userDTO.getFirstName())
                 .lastName(userDTO.getLastName())
-                .userName(userDTO.getUserName())
+                .username(userDTO.getUserName())
                 .address(userDTO.getAddress())
                 .city(userDTO.getCity())
                 .country(userDTO.getCountry())
@@ -47,5 +47,4 @@ public class UserMapper {
                 .build();
 
     }
-
 }

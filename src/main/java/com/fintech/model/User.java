@@ -28,7 +28,7 @@ public class User {
     private String lastName;
 
     @Column(name = "user_name")
-    private String userName;
+    private String username;
 
     @Column(name = "birth_date")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
@@ -57,7 +57,7 @@ public class User {
 
     private boolean enabled;
 
-    private Instant created;
+    private Instant createdDate;
 
     public User(String firstName, String lastName, String email, String password, Role role) {
         this.firstName = firstName;

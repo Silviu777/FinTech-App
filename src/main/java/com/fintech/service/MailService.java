@@ -1,6 +1,6 @@
 package com.fintech.service;
 
-import com.fintech.model.NotificationEmail;
+import com.fintech.model.EmailNotification;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
@@ -16,22 +16,25 @@ import org.springframework.stereotype.Service;
 public class MailService {
 
     private final JavaMailSender mailSender;
+
     private final MailContentBuilder mailContentBuilder;
 
     @Async
-    void sendMail(NotificationEmail notificationEmail) {
+    void sendMail(EmailNotification notificationEmail) {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
+
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setFrom("no-reply-signup@onefintech.com");
             messageHelper.setTo(notificationEmail.getRecipient());
             messageHelper.setSubject(notificationEmail.getSubject());
             messageHelper.setText(mailContentBuilder.build(notificationEmail.getBody()));
         };
+
         try {
             mailSender.send(messagePreparator);
-            log.info("Activation email sent!!");
+            log.info("Activation email sent!");
         } catch (MailException e) {
-            throw new RuntimeException("Exception occurred when sending mail to " + notificationEmail.getRecipient());
+            throw new RuntimeException("Exception occurred when sending email to " + notificationEmail.getRecipient());
         }
     }
 }

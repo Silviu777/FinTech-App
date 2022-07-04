@@ -11,7 +11,7 @@ public interface UserService {
 
     User saveUser(User user);
 
-    User createUser(User user, Role role); // or registerUser?
+    User createUser(User user, Role role);
 
     void deleteUser(User user);
 

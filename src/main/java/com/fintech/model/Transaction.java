@@ -34,7 +34,7 @@ public class Transaction {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER) // review!!
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id")
     @JsonIgnore()
     private Account account;
@@ -48,7 +48,4 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
 
-    public Transaction(BigDecimal amount, Account account, Date date) {
-
-    }
 }

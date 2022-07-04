@@ -39,7 +39,7 @@ public class AccountController {
 
     @PostMapping("/user/{id}/account")
     public ResponseEntity<NewAccountDtoOutput> createAccount(@PathVariable Long id, @RequestBody NewAccountDtoInput newAccount) {
-        return ResponseEntity.ok(accountService.openAccount(newAccount, userService.findById(id).getUserName()));
+        return ResponseEntity.ok(accountService.openAccount(newAccount, userService.findById(id).getUsername()));
     }
 
     @PostMapping("/account/{id}/deposit")

@@ -25,14 +25,17 @@ import java.util.Random;
 @Service
 public class AccountServiceImpl implements AccountService {
 
-    @Autowired
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
     @Autowired
     private TransactionRepository transactionRepository;
 
     @Autowired
     private UserRepository userRepository;
+
+    public AccountServiceImpl(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
 
 
     @Override
@@ -53,7 +56,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account getAccountByIBAN(String iban) {
-        return accountRepository.getAccountByIban(iban);
+        return accountRepository.findAccountByIban(iban);
     }
 
     @Override
@@ -67,7 +70,7 @@ public class AccountServiceImpl implements AccountService {
             throw new NegativeBalance();
         }
 
-        User user = userRepository.findUserByUserName(username).orElseThrow();
+        User user = userRepository.findUserByUsername(username).orElseThrow();
         Account newAccount = new Account();
         String accountIban = createIban();
 
@@ -84,9 +87,7 @@ public class AccountServiceImpl implements AccountService {
             newAccount.setInterestRate(0.3);
         }
 
-        if (newAccount.getDateOpened() == null) {
-            newAccount.setDateOpened(new Date());
-        }
+        newAccount.setDateOpened(new Date());
 
         accountRepository.save(newAccount);
         return new NewAccountDtoOutput(accountIban, username, accountType, balance, currency);
@@ -127,7 +128,7 @@ public class AccountServiceImpl implements AccountService {
     public String createIban() {
         Random random = new Random();
         StringBuilder builder = new StringBuilder();
-        String countryCode = "RO"; // ?? make it international?
+        String countryCode = "RO";
         builder.append(countryCode);
 
         int leftLimit = 65; // letter 'A'
@@ -141,12 +142,11 @@ public class AccountServiceImpl implements AccountService {
 
         int checkDigits = random.nextInt(10) + 10;
         builder.append(checkDigits).append(" ");
-        builder.append(bankCode).append(" ");
+        builder.append(bankCode);
 
         for (int i = 0; i < 4; i++) {
-            long bankAccountNumber = random.nextInt(1000) + 1000;
-            builder.append(bankAccountNumber);
-            builder.append(" ");
+            long bankAccountNumber = random.nextInt(9999 + 1 - 1000) + 1000;
+            builder.append(" " + bankAccountNumber);
         }
 
         return builder.toString();

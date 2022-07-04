@@ -22,4 +22,5 @@ public class NewAccountDtoOutput {
     private BigDecimal balance;
 
     private Currency currency;
+
 }

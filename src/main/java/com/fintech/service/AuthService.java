@@ -4,7 +4,7 @@ import com.fintech.dto.AuthenticationResponse;
 import com.fintech.dto.LoginRequest;
 import com.fintech.dto.RefreshTokenRequest;
 import com.fintech.dto.RegisterRequest;
-import com.fintech.model.NotificationEmail;
+import com.fintech.model.EmailNotification;
 import com.fintech.model.User;
 import com.fintech.model.VerificationToken;
 import com.fintech.repository.UserRepository;
@@ -12,7 +12,6 @@ import com.fintech.repository.VerificationTokenRepository;
 import com.fintech.security.JwtProvider;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -38,27 +37,28 @@ public class AuthService {
 
     private final UserRepository userRepository;
 
-    private final VerificationTokenRepository verificationTokenRepository;
-
     private final MailContentBuilder mailContentBuilder;
 
     private final MailService mailService;
 
     private final AuthenticationManager authenticationManager;
 
+    private final VerificationTokenRepository verificationTokenRepository;
+
     private final JwtProvider jwtProvider;
 
     private final RefreshTokenService refreshTokenService;
+
 
     @Transactional
     public void signup(RegisterRequest registerRequest) {
         User user = new User();
         user.setFirstName(registerRequest.getFirstName());
         user.setLastName(registerRequest.getLastName());
-        user.setUserName(registerRequest.getUsername());
+        user.setUsername(registerRequest.getUsername());
         user.setEmailAddress(registerRequest.getEmail());
         user.setPassword(encodePassword(registerRequest.getPassword()));
-        user.setCreated(Instant.now());
+        user.setCreatedDate(Instant.now());
         user.setEnabled(false);
 
         userRepository.save(user);
@@ -67,7 +67,7 @@ public class AuthService {
         String message = mailContentBuilder.build("Thank you for signing up to One FinTech! Please click on the link below to activate your account : "
                 + ACTIVATION_EMAIL + "/" + token);
 
-        mailService.sendMail(new NotificationEmail("Activate your account", user.getEmailAddress(), message));
+        mailService.sendMail(new EmailNotification("Activate your account", user.getEmailAddress(), message));
     }
 
     private String generateVerificationToken(User user) {
@@ -75,6 +75,7 @@ public class AuthService {
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setToken(token);
         verificationToken.setUser(user);
+        verificationToken.setExpiryDate(Instant.now().plusMillis(900000));
 
         verificationTokenRepository.save(verificationToken);
         return token;
@@ -92,8 +93,8 @@ public class AuthService {
 
     @Transactional
     void fetchUserAndEnable(VerificationToken verificationToken) {
-        String username = verificationToken.getUser().getUserName();
-        User user = userRepository.findUserByUserName(username).orElseThrow(() -> new RuntimeException("User Not Found with id - " + username));
+        String username = verificationToken.getUser().getUsername();
+        User user = userRepository.findUserByUsername(username).orElseThrow(() -> new RuntimeException("User Not Found with id - " + username));
 
         user.setEnabled(true);
         userRepository.save(user);
@@ -107,8 +108,8 @@ public class AuthService {
 
         return AuthenticationResponse.builder()
                 .authenticationToken(token)
-//                .refreshToken(refreshTokenService.generateRefreshToken().getToken())
-//                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
+                .refreshToken(refreshTokenService.generateRefreshToken().getToken())
+                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpiration()))
                 .username(loginRequest.getUsername())
                 .build();
     }
@@ -117,21 +118,21 @@ public class AuthService {
     public User getCurrentUser() {
         Jwt principal = (Jwt) SecurityContextHolder.
                 getContext().getAuthentication().getPrincipal();
-        return userRepository.findUserByUserName(principal.getSubject())
+        return userRepository.findUserByUsername(principal.getSubject())
                 .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getSubject()));
     }
-//
-//    public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
-//        refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
-//        String token = jwtProvider.generateTokenWithUserName(refreshTokenRequest.getUsername());
-//        return AuthenticationResponse.builder()
-//                .authenticationToken(token)
-//                .refreshToken(refreshTokenRequest.getRefreshToken())
-//                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
-//                .username(refreshTokenRequest.getUsername())
-//                .build();
-//    }
-//
+
+    public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+        refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
+        String token = jwtProvider.generateTokenWithUserName(refreshTokenRequest.getUsername());
+        return AuthenticationResponse.builder()
+                .authenticationToken(token)
+                .refreshToken(refreshTokenRequest.getRefreshToken())
+                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpiration()))
+                .username(refreshTokenRequest.getUsername())
+                .build();
+    }
+
 //    public boolean isLoggedIn() {
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();

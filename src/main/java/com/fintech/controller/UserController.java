@@ -36,7 +36,7 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "An user is already registered with this email address! Please log in with the existing credentials or provide another email address.");
         }
 
-        userService.saveUser(newUser); // instead of createUser(User usr, Role rl) !! -- delete this method
+        userService.saveUser(newUser);
         URI location = ServletUriComponentsBuilder.fromCurrentServletMapping()
                 .path("/api/user/{id}").build()
                 .expand(newUser.getId())

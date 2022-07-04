@@ -25,8 +25,6 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private AccountService accountService;
 
-    @Autowired
-    private AccountRepository accountRepository;
 
     @Override
     public boolean findTransactionById(Long id) {
@@ -41,18 +39,18 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void transfer(TransactionRequestDto transactionRequest) {
 
-//        if (sender.equals(receiver)) {
-//            throw new RuntimeException("You cannot send funds to your own account!");
-//        } keep this?
-
         String senderIban = transactionRequest.getSenderIban();
         String receiverIban = transactionRequest.getReceiverIban();
 
-        Account sender = accountRepository.getAccountByIban(senderIban);
-        Account receiver = accountRepository.getAccountByIban(receiverIban);
+        Account sender = accountService.getAccountByIBAN(senderIban);
+        Account receiver = accountService.getAccountByIBAN(receiverIban);
         BigDecimal amount = transactionRequest.getAmount();
         Currency currency = transactionRequest.getCurrency();
         String description = transactionRequest.getDescription();
+
+        if (sender.equals(receiver)) {
+            throw new RuntimeException("You cannot send funds to your own account! Please select another account.");
+        }
 
         if (sender.getBalance().compareTo(amount) < 0 || amount.compareTo(BigDecimal.ZERO) == 0) {
             throw new RuntimeException("You do not have enough funds in your account to complete the transfer!");
