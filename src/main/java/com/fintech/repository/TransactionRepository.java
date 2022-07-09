@@ -18,6 +18,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     List<Transaction> findAllByCurrency(Currency currency);
 
+    List<Transaction> findAllByAccount_AccountNo(String transferFrom);
+
     List<Transaction> findAllByStatus(TransactionStatus transactionStatus);
 
     List<Transaction> findAllByTransactionDateBetween(Date transactionDate, Date transactionDate2);

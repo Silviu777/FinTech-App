@@ -1,5 +1,6 @@
 package com.fintech.service;
 
+import com.fintech.model.Account;
 import com.fintech.model.User;
 import com.fintech.model.enums.Role;
 
@@ -7,11 +8,13 @@ public interface UserService {
 
     User findById(Long id);
 
+    User getUserFromToken(String token);
+
     User findByUsername(String username);
 
     User saveUser(User user);
 
-    User createUser(User user, Role role);
+    String createUser(User user);
 
     void deleteUser(User user);
 
@@ -21,6 +24,6 @@ public interface UserService {
 
     boolean checkEmailAddress(String emailAddress);
 
-    User updateUser(User user);
+    String updateUser(User user);
 
 }

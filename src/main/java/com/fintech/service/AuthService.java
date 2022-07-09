@@ -94,7 +94,7 @@ public class AuthService {
     @Transactional
     void fetchUserAndEnable(VerificationToken verificationToken) {
         String username = verificationToken.getUser().getUsername();
-        User user = userRepository.findUserByUsername(username).orElseThrow(() -> new RuntimeException("User Not Found with id - " + username));
+        User user = userRepository.findUserByUsername(username);
 
         user.setEnabled(true);
         userRepository.save(user);
@@ -118,8 +118,7 @@ public class AuthService {
     public User getCurrentUser() {
         Jwt principal = (Jwt) SecurityContextHolder.
                 getContext().getAuthentication().getPrincipal();
-        return userRepository.findUserByUsername(principal.getSubject())
-                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getSubject()));
+        return userRepository.findUserByUsername(principal.getSubject());
     }
 
     public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {

@@ -1,2 +1,16 @@
-package com.fintech.exception;public class JwtTokenExpiredException {
+package com.fintech.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.UNAUTHORIZED)
+public class JwtTokenExpiredException extends RuntimeException {
+
+    public JwtTokenExpiredException(String message) {
+        super(message);
+    }
+
+    public JwtTokenExpiredException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

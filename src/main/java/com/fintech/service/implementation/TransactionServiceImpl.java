@@ -1,5 +1,6 @@
 package com.fintech.service.implementation;
 
+import com.fintech.config.JwtTokenUtil;
 import com.fintech.dto.TransactionRequestDto;
 import com.fintech.model.Account;
 import com.fintech.model.Transaction;
@@ -9,10 +10,14 @@ import com.fintech.repository.AccountRepository;
 import com.fintech.repository.TransactionRepository;
 import com.fintech.service.AccountService;
 import com.fintech.service.TransactionService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +29,11 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    private final Logger logger = LogManager.getLogger(getClass());
 
 
     @Override
@@ -89,6 +99,15 @@ public class TransactionServiceImpl implements TransactionService {
         else {
             transaction.setStatus(TransactionStatus.REJECTED);
         }
+    }
+
+    @Override
+    public List<Transaction> getTransactionsHistory(String token) {
+        String accountNo = jwtTokenUtil.getUsernameFromToken(token);
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.addAll(transactionRepository.findAllByAccount_AccountNo(accountNo));
+        transactions.sort(Collections.reverseOrder());
+        return transactions;
     }
 
     @Override

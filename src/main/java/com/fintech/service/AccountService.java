@@ -17,7 +17,15 @@ public interface AccountService {
 
     Account getAccount(Long id);
 
+    String createAccount(User user);
+
+    Account getAccountByAccountNo(String accountNo);
+
     Account getAccountByUsername(String username);
+
+    Account getAccountFromToken(String token);
+
+    Account getAccountByUserId(Long userId);
 
     Account getAccountByIBAN(String iban);
 

@@ -43,6 +43,8 @@ public class Account {
     @ManyToOne(fetch = FetchType.EAGER)
     private User owner;
 
+    private String accountNo;
+
     @Column(name = "date_opened")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date dateOpened;

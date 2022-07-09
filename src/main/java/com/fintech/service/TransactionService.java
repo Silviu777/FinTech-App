@@ -17,6 +17,8 @@ public interface TransactionService {
 
     void verifyTransfer(Transaction transaction);
 
+    List<Transaction> getTransactionsHistory(String token);
+
     List<Transaction> viewTransactionsByStatus(TransactionStatus status);
 
     List<Transaction> viewTransactionsByCurrency(Currency currency);
