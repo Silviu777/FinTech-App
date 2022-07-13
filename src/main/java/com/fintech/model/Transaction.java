@@ -17,7 +17,7 @@ import java.util.Date;
 @Builder
 @Getter
 @Setter
-public class Transaction {
+public class Transaction implements Comparable<Transaction> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,6 +39,10 @@ public class Transaction {
     @JsonIgnore()
     private Account account;
 
+    private String sender;
+
+    private String receiver;
+
     @Column(name = "transaction_date")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Temporal(TemporalType.DATE)
@@ -48,4 +52,8 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
 
+    @Override
+    public int compareTo(Transaction transaction) {
+        return this.getTransactionDate().compareTo(transaction.getTransactionDate());
+    }
 }

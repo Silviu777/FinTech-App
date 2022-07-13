@@ -4,7 +4,6 @@ import com.fintech.config.JwtTokenUtil;
 import com.fintech.dto.NewAccountDtoInput;
 import com.fintech.dto.NewAccountDtoOutput;
 import com.fintech.dto.OperationsCodes;
-import com.fintech.exception.NegativeBalance;
 import com.fintech.model.Account;
 import com.fintech.model.Transaction;
 import com.fintech.model.User;
@@ -37,7 +36,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
-
 
     public AccountServiceImpl(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
@@ -78,11 +76,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account getAccountByUsername(String username) {
-        return accountRepository.findAccountByOwner(username);
-    }
-
-    @Override
     public Account getAccountFromToken(String token) {
         String contactNo = jwtTokenUtil.getUsernameFromToken(token);
         return accountRepository.findByAccountNo(contactNo);
@@ -95,7 +88,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account getAccountByIBAN(String iban) {
-        return accountRepository.findAccountByIban(iban);
+        return accountRepository.findByIban(iban);
     }
 
     @Override
@@ -149,11 +142,6 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void updateAccount(Account account) {
         accountRepository.save(account);
-    }
-
-    @Override
-    public void closeAccount(User user) {
-        accountRepository.deleteAccountByOwner(user);
     }
 
     @Override

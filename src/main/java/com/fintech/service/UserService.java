@@ -10,20 +10,10 @@ public interface UserService {
 
     User getUserFromToken(String token);
 
-    User findByUsername(String username);
-
-    User saveUser(User user);
-
     String createUser(User user);
 
-    void deleteUser(User user);
-
-    Role findRoleName(Role role);
-
-    boolean hasRole(User user, Role role); // review!
-
-    boolean checkEmailAddress(String emailAddress);
-
     String updateUser(User user);
+
+    String generateVerificationToken(User user);
 
 }

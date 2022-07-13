@@ -57,7 +57,7 @@ public class UserController {
         } catch (BadRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(OperationsCodes.ERROR, e.getMessage()));
         } catch (Exception e) {
-            logger.error("error produced during creating user : {}", e.getMessage());
+            logger.error("Register Error : {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(OperationsCodes.ERROR, e.getMessage()));
         }
     }
@@ -69,7 +69,7 @@ public class UserController {
         } catch (BadRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(OperationsCodes.ERROR, e.getMessage()));
         } catch (Exception e) {
-            logger.info("error produced during updating user : {}", e.getMessage());
+            logger.info("User Data Update Error : {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(OperationsCodes.ERROR, e.getMessage()));
         }
     }

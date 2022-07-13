@@ -1,6 +1,7 @@
 package com.fintech.controller;
 
 import com.fintech.dto.*;
+import com.fintech.exception.BadRequestException;
 import com.fintech.mapper.AccountMapper;
 import com.fintech.mapper.TransactionMapper;
 import com.fintech.model.Account;
@@ -16,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class AccountController {
     }
 
     @GetMapping("/account")
-    public ResponseEntity<Account> getAccountDetails(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Account> getAccountDetails(HttpServletRequest request) {
         try {
             return ResponseEntity.ok(accountService.getAccountFromToken(request.getHeader("token")));
         } catch (Exception e) {
@@ -53,12 +53,24 @@ public class AccountController {
     }
 
     @GetMapping("/transaction")
-    public ResponseEntity<List<Transaction>> getTransactionHistory(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<List<Transaction>> getTransactionHistory(HttpServletRequest request) {
         try {
             return ResponseEntity.ok(transactionService.getTransactionsHistory(request.getHeader("token")));
         } catch (Exception e) {
-            logger.error("error produced getting transaction history : {}", e.getMessage());
+            logger.error("Error during transaction history fetch : {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
+        }
+    }
+
+    @PostMapping("/transfer")
+    public ResponseEntity<Response> transferMoney(@RequestBody TransactionRequestDto transactionDto, HttpServletRequest request) {
+        try {
+            return ResponseEntity.ok(new Response(OperationsCodes.SUCCESS, transactionService.transfer(transactionDto, request.getHeader("token"))));
+        } catch (BadRequestException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(OperationsCodes.ERROR, e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Error during money transfer : {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(OperationsCodes.ERROR, e.getMessage()));
         }
     }
 
@@ -78,7 +90,7 @@ public class AccountController {
     }
 
     @PostMapping("/account/{id}/deposit")
-    public ResponseEntity depositAmount(@PathVariable Long id, @RequestBody DepositAmountDto depositAmount) {
+    public ResponseEntity<Response> depositAmount(@PathVariable Long id, @RequestBody DepositAmountDto depositAmount) {
         accountService.deposit(id, depositAmount.getAmount());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

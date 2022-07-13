@@ -13,14 +13,10 @@ public interface TransactionService {
 
     void saveTransaction(Transaction transaction);
 
-    void transfer(TransactionRequestDto transaction);
+    String transfer(TransactionRequestDto transaction, String senderToken);
 
     void verifyTransfer(Transaction transaction);
 
     List<Transaction> getTransactionsHistory(String token);
-
-    List<Transaction> viewTransactionsByStatus(TransactionStatus status);
-
-    List<Transaction> viewTransactionsByCurrency(Currency currency);
 
 }

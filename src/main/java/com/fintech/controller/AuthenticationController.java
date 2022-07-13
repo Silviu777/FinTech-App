@@ -7,6 +7,7 @@ import com.fintech.service.AuthService;
 import com.fintech.service.JwtUserDetailsService;
 import com.fintech.service.RefreshTokenService;
 import com.fintech.service.UserService;
+import com.fintech.service.implementation.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +29,6 @@ import static org.springframework.http.HttpStatus.OK;
 @AllArgsConstructor
 public class AuthenticationController {
 
-    private final AuthService authService;
-
     private final RefreshTokenService refreshTokenService;
 
     @Autowired
@@ -41,18 +40,17 @@ public class AuthenticationController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private UserService userService;
+    private final UserServiceImpl userService;
 
-    @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
-        authService.signup(registerRequest);
-        return new ResponseEntity<>("User Registration Successful!", OK);
-    }
+//    @PostMapping("/signup")
+//    public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
+//        authService.signup(registerRequest);
+//        return new ResponseEntity<>("User Registration Successful!", OK);
+//    }
 
     @GetMapping("accountVerification/{token}")
     public ResponseEntity<String> verifyAccount(@PathVariable String token) {
-        authService.verifyAccount(token);
+        userService.verifyAccount(token);
         return new ResponseEntity<>("Account Activated Successfully!", OK);
     }
 
@@ -68,10 +66,10 @@ public class AuthenticationController {
         return ResponseEntity.ok(map);
     }
 
-    @PostMapping("/refresh/token")
-    public AuthenticationResponse refreshTokens(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
-        return authService.refreshToken(refreshTokenRequest);
-    }
+//    @PostMapping("/refresh/token")
+//    public AuthenticationResponse refreshTokens(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+//        return userService.refreshToken(refreshTokenRequest);
+//    }
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {

@@ -21,8 +21,6 @@ public interface AccountService {
 
     Account getAccountByAccountNo(String accountNo);
 
-    Account getAccountByUsername(String username);
-
     Account getAccountFromToken(String token);
 
     Account getAccountByUserId(Long userId);
@@ -32,8 +30,6 @@ public interface AccountService {
     NewAccountDtoOutput openAccount(NewAccountDtoInput newAccount, String username);
 
     void deposit(Long accountId, BigDecimal amount);
-
-    void closeAccount(User user);
 
     void updateAccount(Account account);
 

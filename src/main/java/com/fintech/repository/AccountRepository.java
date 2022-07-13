@@ -18,18 +18,10 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Account findByAccountNo(String accountNo);
 
-    Account findAccountByIban(String iban);
-
-    Account findAccountByAccountType(AccountType type);
-
-    List<Account> findAccountByCurrency(Currency currency);
+    Account findByIban(String iban);
 
     Account findAccountByOwner(String owner);
 
     Account findAccountByOwnerId(Long ownerId);
-
-    Account findAccountByOwnerAndAccountType(User owner, AccountType accountType);
-
-    void deleteAccountByOwner(User owner);
 
 }

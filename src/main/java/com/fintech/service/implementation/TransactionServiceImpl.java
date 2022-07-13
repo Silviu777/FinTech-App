@@ -1,17 +1,16 @@
 package com.fintech.service.implementation;
 
 import com.fintech.config.JwtTokenUtil;
+import com.fintech.dto.OperationsCodes;
 import com.fintech.dto.TransactionRequestDto;
+import com.fintech.exception.BadRequestException;
 import com.fintech.model.Account;
 import com.fintech.model.Transaction;
 import com.fintech.model.enums.Currency;
 import com.fintech.model.enums.TransactionStatus;
-import com.fintech.repository.AccountRepository;
 import com.fintech.repository.TransactionRepository;
 import com.fintech.service.AccountService;
 import com.fintech.service.TransactionService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +32,6 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    private final Logger logger = LogManager.getLogger(getClass());
-
 
     @Override
     public boolean findTransactionById(Long id) {
@@ -47,23 +44,22 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void transfer(TransactionRequestDto transactionRequest) {
-
-        String senderIban = transactionRequest.getSenderIban();
+    public String transfer(TransactionRequestDto transactionRequest, String senderToken) {
+        String senderAccount = jwtTokenUtil.getUsernameFromToken(senderToken);
         String receiverIban = transactionRequest.getReceiverIban();
 
-        Account sender = accountService.getAccountByIBAN(senderIban);
+        Account sender = accountService.getAccountByAccountNo(senderAccount);
         Account receiver = accountService.getAccountByIBAN(receiverIban);
         BigDecimal amount = transactionRequest.getAmount();
         Currency currency = transactionRequest.getCurrency();
         String description = transactionRequest.getDescription();
 
         if (sender.equals(receiver)) {
-            throw new RuntimeException("You cannot send funds to your own account! Please select another account.");
+            throw new BadRequestException("You cannot send funds to your own account! Please select another account.");
         }
 
         if (sender.getBalance().compareTo(amount) < 0 || amount.compareTo(BigDecimal.ZERO) == 0) {
-            throw new RuntimeException("You do not have enough funds in your account to complete the transfer!");
+            throw new BadRequestException("You do not have enough funds in your account to complete the transfer!");
         }
 
         sender.setBalance(sender.getBalance().subtract(amount));
@@ -78,10 +74,12 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setCurrency(currency);
         transaction.setDescription(description);
         transaction.setTransactionDate(new Date());
+        transaction.setSender(sender.getIban());
+        transaction.setReceiver(receiverIban);
         saveTransaction(transaction);
 
         verifyTransfer(transaction);
-
+        return OperationsCodes.TRANSACTION_DONE;
     }
 
     @Override
@@ -104,46 +102,14 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<Transaction> getTransactionsHistory(String token) {
         String accountNo = jwtTokenUtil.getUsernameFromToken(token);
+        Account account = accountService.getAccountByAccountNo(accountNo);
+
         List<Transaction> transactions = new ArrayList<>();
-        transactions.addAll(transactionRepository.findAllByAccount_AccountNo(accountNo));
+        transactions.addAll(transactionRepository.findByReceiver(account.getIban()));
+        transactions.addAll(transactionRepository.findBySender(account.getIban()));
         transactions.sort(Collections.reverseOrder());
+
         return transactions;
-    }
-
-    @Override
-    public List<Transaction> viewTransactionsByStatus(TransactionStatus status) {
-        switch (status) {
-            case PENDING:
-                return transactionRepository.findAllByStatus(TransactionStatus.PENDING);
-
-            case REJECTED:
-                return transactionRepository.findAllByStatus(TransactionStatus.REJECTED);
-
-            case VERIFIED:
-                return transactionRepository.findAllByStatus(TransactionStatus.VERIFIED);
-
-            default:
-                throw new RuntimeException("Could not find any " + status + " transactions!");
-        }
-    }
-
-    @Override
-    public List<Transaction> viewTransactionsByCurrency(Currency currency) {
-        switch (currency) {
-            case RON:
-                return transactionRepository.findAllByCurrency(Currency.RON);
-
-            case EUR:
-                return transactionRepository.findAllByCurrency(Currency.EUR);
-
-            case USD:
-                return transactionRepository.findAllByCurrency(Currency.USD);
-
-            case GBP:
-                return transactionRepository.findAllByCurrency(Currency.GBP);
-
-            default:
-                throw new RuntimeException("Could not find any transactions in " + currency + " !");
-        }
+        
     }
 }

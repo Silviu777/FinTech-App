@@ -4,7 +4,7 @@ public class OperationsCodes {
 
     public static final String SUCCESS = "success";
 
-    public static final String ACCOUNT_CREATED = "Account created";
+    public static final String ACCOUNT_CREATED = "Account created! Please check your email to activate your account.";
 
     public static final String USER_EXIST = "Cannot create your account with blank fields";
 
