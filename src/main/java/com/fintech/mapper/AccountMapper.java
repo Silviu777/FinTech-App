@@ -1,6 +1,6 @@
 package com.fintech.mapper;
 
-import com.fintech.dto.AccountDTO;
+import com.fintech.dto.AccountDto;
 import com.fintech.model.Account;
 
 import java.util.List;
@@ -8,13 +8,13 @@ import java.util.stream.Collectors;
 
 public class AccountMapper {
 
-    public static AccountDTO mapToDto(Account account) {
+    public static AccountDto mapToDto(Account account) {
 
         if (account == null) {
             return null;
         }
 
-        return AccountDTO.builder()
+        return AccountDto.builder()
                 .id(account.getId())
                 .balance(account.getBalance())
                 .accountType(account.getAccountType())
@@ -25,7 +25,7 @@ public class AccountMapper {
                 .build();
     }
     
-    public static Account mapToEntity(AccountDTO accountDTO) {
+    public static Account mapToEntity(AccountDto accountDTO) {
         
         if (accountDTO == null) {
             return null;
@@ -42,7 +42,7 @@ public class AccountMapper {
                 .build();
     }
 
-    public static List<AccountDTO> mapListToDto(List<Account> accounts) {
+    public static List<AccountDto> mapListToDto(List<Account> accounts) {
             return accounts.stream().map(AccountMapper::mapToDto).collect(Collectors.toList());
     }
 }

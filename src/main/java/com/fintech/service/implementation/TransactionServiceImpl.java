@@ -1,7 +1,7 @@
 package com.fintech.service.implementation;
 
 import com.fintech.config.JwtTokenUtil;
-import com.fintech.dto.OperationsCodes;
+import com.fintech.utils.OperationsCodes;
 import com.fintech.dto.TransactionRequestDto;
 import com.fintech.exception.BadRequestException;
 import com.fintech.model.Account;
@@ -110,6 +110,5 @@ public class TransactionServiceImpl implements TransactionService {
         transactions.sort(Collections.reverseOrder());
 
         return transactions;
-        
     }
 }

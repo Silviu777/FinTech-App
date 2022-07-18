@@ -8,7 +8,7 @@ import com.fintech.model.Account;
 import com.fintech.model.Transaction;
 import com.fintech.service.AccountService;
 import com.fintech.service.TransactionService;
-import com.fintech.service.UserService;
+import com.fintech.utils.OperationsCodes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +29,13 @@ public class AccountController {
     private AccountService accountService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private TransactionService transactionService;
 
     private final Logger logger = LogManager.getLogger(getClass());
 
 
     @GetMapping("/accounts")
-    public ResponseEntity<List<AccountDTO>> getAllAcounts() {
+    public ResponseEntity<List<AccountDto>> getAllAcounts() {
         return ResponseEntity.ok(AccountMapper.mapListToDto(accountService.getAllAccounts()));
     }
 
@@ -69,29 +66,30 @@ public class AccountController {
         } catch (BadRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(OperationsCodes.ERROR, e.getMessage()));
         } catch (Exception e) {
-            logger.error("Error during money transfer : {}", e.getMessage());
+            logger.error("Error during money transfer operation: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(OperationsCodes.ERROR, e.getMessage()));
+        }
+    }
+
+    @PostMapping("/deposit")
+    public ResponseEntity<Response> depositMoney(@RequestBody DepositDto deposit, HttpServletRequest request) {
+        try {
+            return ResponseEntity.ok(new Response(OperationsCodes.SUCCESS, accountService.deposit(deposit, request.getHeader("token"))));
+        } catch (BadRequestException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(OperationsCodes.ERROR, e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Error during money deposit operation: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(OperationsCodes.ERROR, e.getMessage()));
         }
     }
 
     @GetMapping("/account/{id}")
-    public ResponseEntity<AccountDTO> displayAccount(@PathVariable Long id) {
+    public ResponseEntity<AccountDto> displayAccount(@PathVariable Long id) {
         return ResponseEntity.ok(AccountMapper.mapToDto(accountService.getAccount(id)));
     }
 
     @GetMapping("/account/{id}/transactions")
     public ResponseEntity<List<TransactionDto>> listAccountTransactions(@PathVariable Long id) {
         return ResponseEntity.ok(TransactionMapper.mapListToDto(accountService.viewAccountTransactions(id)));
-    }
-
-    @PostMapping("/user/{id}/account")
-    public ResponseEntity<NewAccountDtoOutput> createAccount(@PathVariable Long id, @RequestBody NewAccountDtoInput newAccount) {
-        return ResponseEntity.ok(accountService.openAccount(newAccount, userService.findById(id).getUsername()));
-    }
-
-    @PostMapping("/account/{id}/deposit")
-    public ResponseEntity<Response> depositAmount(@PathVariable Long id, @RequestBody DepositAmountDto depositAmount) {
-        accountService.deposit(id, depositAmount.getAmount());
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

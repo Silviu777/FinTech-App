@@ -1,6 +1,6 @@
 package com.fintech.controller;
 
-import com.fintech.dto.OperationsCodes;
+import com.fintech.utils.OperationsCodes;
 import com.fintech.dto.Response;
 import com.fintech.dto.UserDto;
 import com.fintech.exception.BadRequestException;

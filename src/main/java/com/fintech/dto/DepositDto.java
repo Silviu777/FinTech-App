@@ -9,8 +9,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DepositAmountDto {
+public class DepositDto {
 
     private BigDecimal amount;
-
 }

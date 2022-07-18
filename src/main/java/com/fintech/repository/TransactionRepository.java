@@ -20,6 +20,4 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     List<Transaction> findByReceiver(String receiverAccountNo);
 
-    List<Transaction> findAllByTransactionDateBetween(Date transactionDate, Date transactionDate2);
-
 }

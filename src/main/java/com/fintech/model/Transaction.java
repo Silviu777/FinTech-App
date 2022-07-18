@@ -29,7 +29,7 @@ public class Transaction implements Comparable<Transaction> {
 
     @Column(name = "currency")
     @Enumerated(EnumType.STRING)
-    private Currency currency;   // keep it or delete it? -> 03.06 ? keep it? third-party processing payments
+    private Currency currency;   // alternative: third-party processing payments
 
     @Column(name = "description")
     private String description;

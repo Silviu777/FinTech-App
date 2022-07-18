@@ -1,12 +1,12 @@
 package com.fintech.controller;
 
 import com.fintech.config.JwtTokenUtil;
-import com.fintech.dto.*;
+import com.fintech.dto.AuthenticationResponse;
+import com.fintech.dto.JwtRequest;
+import com.fintech.dto.RefreshTokenRequest;
 import com.fintech.model.User;
-import com.fintech.service.AuthService;
 import com.fintech.service.JwtUserDetailsService;
 import com.fintech.service.RefreshTokenService;
-import com.fintech.service.UserService;
 import com.fintech.service.implementation.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +42,6 @@ public class AuthenticationController {
 
     private final UserServiceImpl userService;
 
-//    @PostMapping("/signup")
-//    public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
-//        authService.signup(registerRequest);
-//        return new ResponseEntity<>("User Registration Successful!", OK);
-//    }
 
     @GetMapping("accountVerification/{token}")
     public ResponseEntity<String> verifyAccount(@PathVariable String token) {
@@ -66,10 +61,10 @@ public class AuthenticationController {
         return ResponseEntity.ok(map);
     }
 
-//    @PostMapping("/refresh/token")
-//    public AuthenticationResponse refreshTokens(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
-//        return userService.refreshToken(refreshTokenRequest);
-//    }
+    @PostMapping("/refresh/token")
+    public AuthenticationResponse refreshTokens(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return userService.refreshToken(refreshTokenRequest);
+    }
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {

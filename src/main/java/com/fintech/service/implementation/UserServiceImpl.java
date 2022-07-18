@@ -1,17 +1,17 @@
 package com.fintech.service.implementation;
 
 import com.fintech.config.JwtTokenUtil;
-import com.fintech.dto.OperationsCodes;
+import com.fintech.dto.AuthenticationResponse;
+import com.fintech.dto.RefreshTokenRequest;
+import com.fintech.security.JwtProvider;
+import com.fintech.service.*;
+import com.fintech.utils.OperationsCodes;
 import com.fintech.exception.BadRequestException;
 import com.fintech.model.EmailNotification;
 import com.fintech.model.User;
 import com.fintech.model.VerificationToken;
 import com.fintech.repository.UserRepository;
 import com.fintech.repository.VerificationTokenRepository;
-import com.fintech.service.AccountService;
-import com.fintech.service.MailContentBuilder;
-import com.fintech.service.MailService;
-import com.fintech.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +38,12 @@ public class UserServiceImpl implements UserService {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
+    private JwtProvider jwtProvider;
+
+    @Autowired
+    private RefreshTokenService refreshTokenService;
+
+    @Autowired
     private MailContentBuilder mailContentBuilder;
 
     @Autowired
@@ -56,15 +62,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserFromToken(String token) {
-        String contactNo = jwtTokenUtil.getUsernameFromToken(token);
-        return userRepository.findUserByUsername(contactNo);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        return userRepository.findUserByUsername(username);
     }
 
     @Override
     public String createUser(User user) {
         if (userRepository.findUserByUsername(user.getUsername()) != null) {
             logger.info("User with username " +  user.getUsername() + "already exists!");
-            throw new BadRequestException(OperationsCodes.USER_EXIST);
+            throw new BadRequestException(OperationsCodes.EXISTENT_USER);
         }
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -81,7 +87,7 @@ public class UserServiceImpl implements UserService {
         String message = mailContentBuilder.build("Thank you for signing up to One FinTech! Please click on the link below to activate your account : "
                 + ACTIVATION_EMAIL + "/" + token);
 
-        mailService.sendMail(new EmailNotification("Activate your account", user.getEmailAddress(), message));
+        mailService.sendMail(new EmailNotification("Activate your One FinTech account", user.getEmailAddress(), message));
         return accountService.createAccount(user);
     }
 
@@ -112,9 +118,20 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+        refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
+        String token = jwtProvider.generateTokenWithUserName(refreshTokenRequest.getUsername());
+        return AuthenticationResponse.builder()
+                .authenticationToken(token)
+                .refreshToken(refreshTokenRequest.getRefreshToken())
+                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpiration()))
+                .username(refreshTokenRequest.getUsername())
+                .build();
+    }
+
     @Override
     public String updateUser(User user) {
-        User currentUser = userRepository.findByUsername(user.getUsername());
+        User currentUser = userRepository.findUserByUsername(user.getUsername());
         if (currentUser != null) {
             user.setId(currentUser.getId());
             user.setFirstName(currentUser.getFirstName());
@@ -126,8 +143,7 @@ public class UserServiceImpl implements UserService {
             return OperationsCodes.USER_UPDATED;
 
         } else {
-            throw new RuntimeException("User " + currentUser + " not found!");
+            throw new RuntimeException("User " + currentUser + " cannot be found!");
         }
-
     }
 }

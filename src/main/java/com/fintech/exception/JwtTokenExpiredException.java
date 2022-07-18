@@ -10,7 +10,4 @@ public class JwtTokenExpiredException extends RuntimeException {
         super(message);
     }
 
-    public JwtTokenExpiredException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

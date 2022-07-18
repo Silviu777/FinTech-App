@@ -20,21 +20,22 @@ public class MailService {
     private final MailContentBuilder mailContentBuilder;
 
     @Async
-    public void sendMail(EmailNotification notificationEmail) {
+    public void sendMail(EmailNotification email) {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
 
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setFrom("no-reply-signup@onefintech.com");
-            messageHelper.setTo(notificationEmail.getRecipient());
-            messageHelper.setSubject(notificationEmail.getSubject());
-            messageHelper.setText(mailContentBuilder.build(notificationEmail.getBody()));
+            messageHelper.setTo(email.getRecipient());
+            messageHelper.setSubject(email.getSubject());
+            messageHelper.setText(mailContentBuilder.build(email.getBody()));
         };
 
         try {
             mailSender.send(messagePreparator);
             log.info("Activation email sent!");
+
         } catch (MailException e) {
-            throw new RuntimeException("Exception occurred when sending email to " + notificationEmail.getRecipient());
+            throw new RuntimeException("Exception occurred when sending email to " + email.getRecipient());
         }
     }
 }

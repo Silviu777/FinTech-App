@@ -1,15 +1,15 @@
 package com.fintech.service.implementation;
 
 import com.fintech.config.JwtTokenUtil;
+import com.fintech.dto.DepositDto;
 import com.fintech.dto.NewAccountDtoInput;
 import com.fintech.dto.NewAccountDtoOutput;
-import com.fintech.dto.OperationsCodes;
+import com.fintech.utils.OperationsCodes;
 import com.fintech.model.Account;
 import com.fintech.model.Transaction;
 import com.fintech.model.User;
 import com.fintech.model.enums.AccountType;
 import com.fintech.model.enums.Currency;
-import com.fintech.model.enums.TransactionStatus;
 import com.fintech.repository.AccountRepository;
 import com.fintech.repository.TransactionRepository;
 import com.fintech.repository.UserRepository;
@@ -98,7 +98,6 @@ public class AccountServiceImpl implements AccountService {
         Currency currency = (newAccountDetails.getCurrency());
         BigDecimal balance = newAccountDetails.getBalance();
 
-
         User user = userRepository.findUserByUsername(username);
         Account newAccount = new Account();
         String accountIban = createIban();
@@ -124,19 +123,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void deposit(Long accountId, BigDecimal amount) {
-        Account account = getAccount(accountId);
-        account.setBalance(account.getBalance().add(amount));
+    public String deposit(DepositDto deposit, String token) {
+        Account account = getAccountFromToken(token);
+        account.setBalance(account.getBalance().add(deposit.getAmount()));
 
-        Transaction transaction = new Transaction();
-        transaction.setAccount(account);
-        transaction.setTransactionDate(new Date());
-        transaction.setAmount(amount);
-        transaction.setStatus(TransactionStatus.VERIFIED);
-        transaction.setCurrency(account.getCurrency());
-        transaction.setDescription("Account deposit");
-        transactionRepository.save(transaction);
         accountRepository.save(account);
+        return OperationsCodes.DEPOSIT_DONE;
     }
 
     @Override

@@ -1,19 +1,11 @@
 package com.fintech.controller;
 
 
-import com.fintech.dto.OperationsCodes;
-import com.fintech.dto.Response;
-import com.fintech.dto.TransactionRequestDto;
-import com.fintech.exception.BadRequestException;
 import com.fintech.service.TransactionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")

@@ -1,7 +1,6 @@
 package com.fintech.service;
 
 import com.fintech.dto.AuthenticationResponse;
-import com.fintech.dto.LoginRequest;
 import com.fintech.dto.RefreshTokenRequest;
 import com.fintech.dto.RegisterRequest;
 import com.fintech.model.EmailNotification;
@@ -12,16 +11,11 @@ import com.fintech.repository.VerificationTokenRepository;
 import com.fintech.security.JwtProvider;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.fintech.utils.Constants.ACTIVATION_EMAIL;
@@ -39,13 +33,7 @@ public class AuthService {
 
     private final MailService mailService;
 
-    private final AuthenticationManager authenticationManager;
-
     private final VerificationTokenRepository verificationTokenRepository;
-
-    private final JwtProvider jwtProvider;
-
-    private final RefreshTokenService refreshTokenService;
 
 
     @Transactional
@@ -83,43 +71,4 @@ public class AuthService {
         return passwordEncoder.encode(password);
     }
 
-    public void verifyAccount(String token) {
-        Optional<VerificationToken> verificationTokenOptional = verificationTokenRepository.findByToken(token);
-        verificationTokenOptional.orElseThrow(() -> new RuntimeException("Invalid Token"));
-        fetchUserAndEnable(verificationTokenOptional.get());
-    }
-
-    @Transactional
-    void fetchUserAndEnable(VerificationToken verificationToken) {
-        String username = verificationToken.getUser().getUsername();
-        User user = userRepository.findUserByUsername(username);
-
-        user.setEnabled(true);
-        userRepository.save(user);
-    }
-
-    public AuthenticationResponse login(LoginRequest loginRequest) {
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
-                loginRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authenticate);
-        String token = jwtProvider.generateToken(authenticate);
-
-        return AuthenticationResponse.builder()
-                .authenticationToken(token)
-                .refreshToken(refreshTokenService.generateRefreshToken().getToken())
-                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpiration()))
-                .username(loginRequest.getUsername())
-                .build();
-    }
-
-    public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
-        refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
-        String token = jwtProvider.generateTokenWithUserName(refreshTokenRequest.getUsername());
-        return AuthenticationResponse.builder()
-                .authenticationToken(token)
-                .refreshToken(refreshTokenRequest.getRefreshToken())
-                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpiration()))
-                .username(refreshTokenRequest.getUsername())
-                .build();
-    }
 }
