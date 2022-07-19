@@ -1,5 +1,6 @@
 package com.fintech.service;
 
+import com.fintech.dto.DepositDto;
 import com.fintech.dto.NewAccountDtoInput;
 import com.fintech.dto.NewAccountDtoOutput;
 import com.fintech.model.Account;
@@ -17,15 +18,19 @@ public interface AccountService {
 
     Account getAccount(Long id);
 
-    Account getAccountByUsername(String username);
+    String createAccount(User user);
+
+    Account getAccountByAccountNo(String accountNo);
+
+    Account getAccountFromToken(String token);
+
+    Account getAccountByUserId(Long userId);
 
     Account getAccountByIBAN(String iban);
 
     NewAccountDtoOutput openAccount(NewAccountDtoInput newAccount, String username);
 
-    void deposit(Long accountId, BigDecimal amount);
-
-    void closeAccount(User user);
+    String deposit(DepositDto deposit, String token);
 
     void updateAccount(Account account);
 

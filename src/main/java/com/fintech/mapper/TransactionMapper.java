@@ -17,7 +17,7 @@ public class TransactionMapper {
         return TransactionDto.builder()
                 .id(transaction.getId())
                 .amount(transaction.getAmount())
-                .currency(transaction.getCurrency()) // delete currency ?
+                .currency(transaction.getCurrency())
                 .description(transaction.getDescription())
                 .transactionDate(transaction.getTransactionDate())
                 .status(transaction.getStatus())
@@ -43,5 +43,4 @@ public class TransactionMapper {
     public static List<TransactionDto> mapListToDto(List<Transaction> transactions) {
         return transactions.stream().map(TransactionMapper::mapToDto).collect(Collectors.toList());
     }
-
 }

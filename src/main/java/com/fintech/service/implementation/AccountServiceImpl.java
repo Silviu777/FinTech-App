@@ -1,14 +1,15 @@
 package com.fintech.service.implementation;
 
+import com.fintech.config.JwtTokenUtil;
+import com.fintech.dto.DepositDto;
 import com.fintech.dto.NewAccountDtoInput;
 import com.fintech.dto.NewAccountDtoOutput;
-import com.fintech.exception.NegativeBalance;
+import com.fintech.utils.OperationsCodes;
 import com.fintech.model.Account;
 import com.fintech.model.Transaction;
 import com.fintech.model.User;
 import com.fintech.model.enums.AccountType;
 import com.fintech.model.enums.Currency;
-import com.fintech.model.enums.TransactionStatus;
 import com.fintech.repository.AccountRepository;
 import com.fintech.repository.TransactionRepository;
 import com.fintech.repository.UserRepository;
@@ -25,14 +26,20 @@ import java.util.Random;
 @Service
 public class AccountServiceImpl implements AccountService {
 
-    @Autowired
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
     @Autowired
     private TransactionRepository transactionRepository;
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    public AccountServiceImpl(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
 
 
     @Override
@@ -47,13 +54,41 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account getAccountByUsername(String username) {
-        return accountRepository.findAccountByOwner(username);
+    public String createAccount(User user) {
+        Account account = new Account();
+        String accountIban = createIban();
+        account.setAccountNo(user.getUsername());
+        account.setAccountType(AccountType.PRIMARY);
+        account.setInterestRate(3);
+        account.setBalance(BigDecimal.valueOf(100));
+        account.setOwner(user);
+        account.setCurrency(Currency.RON);
+        account.setIban(accountIban);
+        account.setDateOpened(new Date());
+
+        accountRepository.save(account);
+        return OperationsCodes.ACCOUNT_CREATED;
+    }
+
+    @Override
+    public Account getAccountByAccountNo(String accountNo) {
+        return accountRepository.findByAccountNo(accountNo);
+    }
+
+    @Override
+    public Account getAccountFromToken(String token) {
+        String contactNo = jwtTokenUtil.getUsernameFromToken(token);
+        return accountRepository.findByAccountNo(contactNo);
+    }
+
+    @Override
+    public Account getAccountByUserId(Long userId) {
+        return accountRepository.findAccountByOwnerId(userId);
     }
 
     @Override
     public Account getAccountByIBAN(String iban) {
-        return accountRepository.getAccountByIban(iban);
+        return accountRepository.findByIban(iban);
     }
 
     @Override
@@ -63,11 +98,7 @@ public class AccountServiceImpl implements AccountService {
         Currency currency = (newAccountDetails.getCurrency());
         BigDecimal balance = newAccountDetails.getBalance();
 
-        if (balance.compareTo(BigDecimal.ZERO) < 0) {
-            throw new NegativeBalance();
-        }
-
-        User user = userRepository.findUserByUserName(username);
+        User user = userRepository.findUserByUsername(username);
         Account newAccount = new Account();
         String accountIban = createIban();
 
@@ -84,9 +115,7 @@ public class AccountServiceImpl implements AccountService {
             newAccount.setInterestRate(0.3);
         }
 
-        if (newAccount.getDateOpened() == null) {
-            newAccount.setDateOpened(new Date());
-        }
+        newAccount.setDateOpened(new Date());
 
         accountRepository.save(newAccount);
         return new NewAccountDtoOutput(accountIban, username, accountType, balance, currency);
@@ -94,29 +123,17 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void deposit(Long accountId, BigDecimal amount) {
-        Account account = getAccount(accountId);
-        account.setBalance(account.getBalance().add(amount));
+    public String deposit(DepositDto deposit, String token) {
+        Account account = getAccountFromToken(token);
+        account.setBalance(account.getBalance().add(deposit.getAmount()));
 
-        Transaction transaction = new Transaction();
-        transaction.setAccount(account);
-        transaction.setTransactionDate(new Date());
-        transaction.setAmount(amount);
-        transaction.setStatus(TransactionStatus.VERIFIED);
-        transaction.setCurrency(account.getCurrency());
-        transaction.setDescription("Account deposit");
-        transactionRepository.save(transaction);
         accountRepository.save(account);
+        return OperationsCodes.DEPOSIT_DONE;
     }
 
     @Override
     public void updateAccount(Account account) {
         accountRepository.save(account);
-    }
-
-    @Override
-    public void closeAccount(User user) {
-        accountRepository.deleteAccountByOwner(user);
     }
 
     @Override
@@ -127,7 +144,7 @@ public class AccountServiceImpl implements AccountService {
     public String createIban() {
         Random random = new Random();
         StringBuilder builder = new StringBuilder();
-        String countryCode = "RO"; // ?? make it international?
+        String countryCode = "RO";
         builder.append(countryCode);
 
         int leftLimit = 65; // letter 'A'
@@ -141,12 +158,11 @@ public class AccountServiceImpl implements AccountService {
 
         int checkDigits = random.nextInt(10) + 10;
         builder.append(checkDigits).append(" ");
-        builder.append(bankCode).append(" ");
+        builder.append(bankCode);
 
         for (int i = 0; i < 4; i++) {
-            long bankAccountNumber = random.nextInt(1000) + 1000;
-            builder.append(bankAccountNumber);
-            builder.append(" ");
+            long bankAccountNumber = random.nextInt(9999 + 1 - 1000) + 1000;
+            builder.append(" " + bankAccountNumber);
         }
 
         return builder.toString();

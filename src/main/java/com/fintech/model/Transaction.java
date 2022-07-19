@@ -17,7 +17,7 @@ import java.util.Date;
 @Builder
 @Getter
 @Setter
-public class Transaction {
+public class Transaction implements Comparable<Transaction> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,15 +29,19 @@ public class Transaction {
 
     @Column(name = "currency")
     @Enumerated(EnumType.STRING)
-    private Currency currency;   // keep it or delete it? -> 03.06 ? keep it? third-party processing payments
+    private Currency currency;   // alternative: third-party processing payments
 
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER) // review!!
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id")
     @JsonIgnore()
     private Account account;
+
+    private String sender;
+
+    private String receiver;
 
     @Column(name = "transaction_date")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
@@ -48,7 +52,8 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
 
-    public Transaction(BigDecimal amount, Account account, Date date) {
-
+    @Override
+    public int compareTo(Transaction transaction) {
+        return this.getTransactionDate().compareTo(transaction.getTransactionDate());
     }
 }

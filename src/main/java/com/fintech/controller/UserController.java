@@ -1,27 +1,48 @@
 package com.fintech.controller;
 
+import com.fintech.utils.OperationsCodes;
+import com.fintech.dto.Response;
 import com.fintech.dto.UserDto;
+import com.fintech.exception.BadRequestException;
 import com.fintech.mapper.UserMapper;
+import com.fintech.model.Account;
 import com.fintech.model.User;
-import com.fintech.model.enums.Role;
+import com.fintech.service.AccountService;
 import com.fintech.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/user")
+@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/api")
 public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AccountService accountService;
+
+    private final Logger logger = LogManager.getLogger(getClass());
+
+
+    @GetMapping("/user")
+    public ResponseEntity<User> getUserFromToken(HttpServletResponse response, HttpServletRequest request) {
+        try {
+            return ResponseEntity.ok(userService.getUserFromToken(request.getHeader("token")));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> displayUserById(@PathVariable Long id) {
@@ -29,19 +50,33 @@ public class UserController {
         return ResponseEntity.ok(UserMapper.mapToDto(userService.findById(id)));
     }
 
-    @PostMapping("/createUser")
-    public ResponseEntity<User> createUser(@RequestParam(defaultValue="CLIENT") Role role, @RequestBody User newUser) {
-
-        if (userService.checkEmailAddress(newUser.getEmailAddress())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "An user is already registered with this email address! Please log in with the existing credentials or provide another email address.");
+    @PostMapping("/user")
+    public ResponseEntity<Response> createUser(@RequestBody User user) {
+        try {
+            return ResponseEntity.ok(new Response(OperationsCodes.SUCCESS, userService.createUser(user)));
+        } catch (BadRequestException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(OperationsCodes.ERROR, e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Register Error : {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(OperationsCodes.ERROR, e.getMessage()));
         }
-
-        userService.saveUser(newUser); // instead of createUser(User usr, Role rl) !! -- delete this method
-        URI location = ServletUriComponentsBuilder.fromCurrentServletMapping()
-                .path("/api/user/{id}").build()
-                .expand(newUser.getId())
-                .toUri();
-        return ResponseEntity.created(location).body(newUser);
     }
-    // ADD changePassword() method?
+
+    @PutMapping("/user")
+    public ResponseEntity<Response> updateUser(@RequestBody User user) {
+        try {
+            return ResponseEntity.ok(new Response(OperationsCodes.SUCCESS, userService.updateUser(user)));
+        } catch (BadRequestException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(OperationsCodes.ERROR, e.getMessage()));
+        } catch (Exception e) {
+            logger.info("User Data Update Error : {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(OperationsCodes.ERROR, e.getMessage()));
+        }
+    }
+
+    @GetMapping("/{id}/account")
+    public ResponseEntity<Account> getAccount(@PathVariable Long id) {
+
+        return ResponseEntity.ok(accountService.getAccountByUserId(id));
+    }
 }

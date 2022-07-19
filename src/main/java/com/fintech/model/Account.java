@@ -43,6 +43,8 @@ public class Account {
     @ManyToOne(fetch = FetchType.EAGER)
     private User owner;
 
+    private String accountNo;
+
     @Column(name = "date_opened")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date dateOpened;
@@ -50,7 +52,4 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transaction> transactionList;
 
-    public Account(User user, AccountType accountType, Currency currency, BigDecimal balance) {
-
-    }
 }

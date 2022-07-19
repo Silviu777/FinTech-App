@@ -16,16 +16,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     List<Transaction> findAllByAccount(Account account);
 
-    List<Transaction> findAllByCurrency(Currency currency);
+    List<Transaction> findBySender(String senderAccountNo);
 
-    List<Transaction> findAllByStatus(TransactionStatus transactionStatus);
-
-    List<Transaction> findAllByTransactionDateBetween(Date transactionDate, Date transactionDate2);
-
-    List<Transaction> findAllByAmountGreaterThan(BigDecimal amount);
-
-    List<Transaction> findAllByAmountLessThan(BigDecimal amount);
-
-    List<Transaction> findAllByAmountBetween(BigDecimal minAmount, BigDecimal maxAmount);
+    List<Transaction> findByReceiver(String receiverAccountNo);
 
 }
