@@ -79,20 +79,4 @@ public class UserController {
 
         return ResponseEntity.ok(accountService.getAccountByUserId(id));
     }
-
-//    @PostMapping("/createUser")
-//    public ResponseEntity<User> createUser(@RequestParam(defaultValue="CLIENT") Role role, @RequestBody User newUser) {
-//
-//        if (userService.checkEmailAddress(newUser.getEmailAddress())) {
-//            throw new ResponseStatusException(HttpStatus.CONFLICT, "An user is already registered with this email address! Please log in with the existing credentials or provide another email address.");
-//        }
-//
-//        userService.saveUser(newUser);
-//        URI location = ServletUriComponentsBuilder.fromCurrentServletMapping()
-//                .path("/api/user/{id}").build()
-//                .expand(newUser.getId())
-//                .toUri();
-//        return ResponseEntity.created(location).body(newUser);
-//    }
-    // ADD changePassword() method?
 }
