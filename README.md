@@ -1,1 +1,1 @@
-# FinTech-App - v1
+# One FinTech Bachelors Application
