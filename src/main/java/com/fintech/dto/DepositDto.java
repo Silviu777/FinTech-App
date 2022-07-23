@@ -12,4 +12,5 @@ import java.math.BigDecimal;
 public class DepositDto {
 
     private BigDecimal amount;
+
 }

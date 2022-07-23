@@ -36,7 +36,7 @@ public class UserController {
 
 
     @GetMapping("/user")
-    public ResponseEntity<User> getUserFromToken(HttpServletResponse response, HttpServletRequest request) {
+    public ResponseEntity<User> getUserFromToken(HttpServletRequest request) {
         try {
             return ResponseEntity.ok(userService.getUserFromToken(request.getHeader("token")));
         } catch (Exception e) {
@@ -46,7 +46,6 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> displayUserById(@PathVariable Long id) {
-
         return ResponseEntity.ok(UserMapper.mapToDto(userService.findById(id)));
     }
 
@@ -57,7 +56,7 @@ public class UserController {
         } catch (BadRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(OperationsCodes.ERROR, e.getMessage()));
         } catch (Exception e) {
-            logger.error("Register Error : {}", e.getMessage());
+            logger.error("Register error : {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(OperationsCodes.ERROR, e.getMessage()));
         }
     }
@@ -69,14 +68,13 @@ public class UserController {
         } catch (BadRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(OperationsCodes.ERROR, e.getMessage()));
         } catch (Exception e) {
-            logger.info("User Data Update Error : {}", e.getMessage());
+            logger.info("User data update error : {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(OperationsCodes.ERROR, e.getMessage()));
         }
     }
 
     @GetMapping("/{id}/account")
     public ResponseEntity<Account> getAccount(@PathVariable Long id) {
-
         return ResponseEntity.ok(accountService.getAccountByUserId(id));
     }
 }

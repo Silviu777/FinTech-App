@@ -44,14 +44,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
-                logger.info("Unable to get JWT Token");
+                logger.info("Unable to get JWT token!");
             } catch (ExpiredJwtException e) {
                 logger.info("JWT Token has expired!");
-                throw new JwtTokenExpiredException("Token Expired!");
+                throw new JwtTokenExpiredException("Token expired!");
             }
 
         } else {
-            logger.warn("JWT token not found");
+            logger.warn("JWT token not found!");
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
