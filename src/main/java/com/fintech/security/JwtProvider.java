@@ -22,11 +22,6 @@ public class JwtProvider {
     @Value("${jwt.expiration.time}")
     private Long jwtExpiration;
 
-    public String generateToken(Authentication authentication) {
-        User principal = (User) authentication.getPrincipal();
-        return generateTokenWithUserName(principal.getUsername());
-    }
-
     public String generateTokenWithUserName(String username) {
 
         Date now = new Date();
