@@ -14,8 +14,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     List<Account> findAll();
 
-    Account findAccountById(Long id);
-
     Account findByAccountNo(String accountNo);
 
     Account findByIban(String iban);
