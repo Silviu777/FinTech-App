@@ -1,0 +1,57 @@
+<div class="wrapper">
+    <div class="page-header" style="background-image: url('./assets/img/sunset-city.jpeg');">
+        <div class="filter"></div>
+        <div class="container" style="padding-right: 8em;">
+            <div class="row">
+                <h2 style="color: white; text-align:center; font-size: 60px; display:inline-block; padding-left:
+                2.8em; padding-top: 2em; font-weight: bolder;">
+                    Welcome to
+                    One FinTech</h2>
+                <div class="col-lg-4 col-sm-6 mr-auto ml-auto" style="padding-bottom: 7em;">
+
+                    <div class="card card-register">
+                        <h3 class="title" style="font-weight: bold; color: #E98039">Sign In</h3>
+
+                        <form [formGroup]="loginForm" (ngSubmit)="login()">
+                            <label style="margin-right:21em;">Username</label>
+                            <div class="input-group form-group-no-border">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="nc-icon nc-single-02"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Username" id="contactNo"
+                                    formControlName="contactNo">
+                            </div>
+
+                            <label style="margin-right:21em;">Password</label>
+                            <div class="input-group form-group-no-border">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="nc-icon nc-key-25"></i>
+                                    </span>
+                                </div>
+                                <input type="password" class="form-control" placeholder="Password" id="pin"
+                                    formControlName="pin">
+                            </div>
+                            <div class="col-md-10 ml-auto mr-auto" style="margin-top:1em;">
+                                <button class="btn btn-danger btn-block btn-round" type="submit"
+                                    style="margin-top: 3.5em;">Log
+                                    in</button>
+                                <div style="padding-left: 9px; padding-top: 1.1em;">
+                                    <span>New to One FinTech? <a routerLink="/register">Register now</a></span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class=" row">
+                <p
+                    style="color: aliceblue; font-weight: bold; text-align:center; font-size: 14px; padding-left: 26.5em; padding-top: 0.1em;">
+                    © Copyright 2022 One FinTech. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+
+</div>

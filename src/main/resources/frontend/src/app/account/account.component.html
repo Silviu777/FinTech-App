@@ -1,0 +1,141 @@
+<div class="wrapper">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+    <div class="main" class="page-header"
+        style="background-image: url('./assets/img/wp1.jpeg'); padding-bottom: 28.5em;">
+        <div class="container">
+            <div class="header-margin"></div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="tim-title text-center">
+                        <h1 style="text-align: center; color: black; padding-top: 0.3em; font-size: 57px;">Account
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-top: 2.5em; padding-left: 0.5em;">
+                <form id="userForm" name="AccountForm">
+                    <div class="col-md-12 row-display form-group">
+                        <div class="col-md-2">
+                            <label class="form-check-label" style="color: aliceblue; font-size: 22px;">Account
+                                IBAN</label>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <input class="form-control bg-light" type="email" id="accountNo" disabled
+                                    placeholder="Account IBAN" [value]="accountNo" style="font-size: 20.5px;">
+                                <div class="input-group-append">
+                                    <span class="glyphicon glyphicon-calendar input-group-text">
+                                        <i class="fa fa-bank" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 row-display form-group" style="padding-bottom: 0.5em;">
+                        <div class="col-md-2">
+                            <label class="form-check-label"
+                                style="color: aliceblue; font-size: 23px; padding-left: 1.2em;">Balance
+                            </label>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="input-group" style="backdrop-filter: blur(40px);">
+                                <input class="form-control bg-light" type="email" id="email" disabled
+                                    placeholder="Balance" [value]="balance" style="font-size: 22px;">
+                                <div class="input-group-append">
+                                    <span class="glyphicon glyphicon-calendar input-group-text">
+                                        <i class="fas fa-wallet" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 row-display form-group" style="padding-bottom: 0.5em;">
+                        <div class="col-md-2">
+                            <label class="form-check-label"
+                                style="color: aliceblue; font-size: 22px; padding-left: 1.5em;">Currency
+                            </label>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <input class="form-control bg-light" type="text" id="text" disabled
+                                    placeholder="Currency" [value]="currency" style="font-size: 20px;">
+                                <div class="input-group-append">
+                                    <span class="glyphicon glyphicon-calendar input-group-text">
+                                        <i class="fa fa-money" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 row-display form-group" style="padding-bottom: 0.5em;">
+                        <div class=" col-md-2">
+                            <label class="form-check-label"
+                                style="color: aliceblue; font-size: 22px; padding-left: 0.5em;">Interest
+                                Rate
+                            </label>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <input class="form-control bg-light" type="number" id="number" disabled
+                                    placeholder="Interest rate" [value]="interestRate" style="font-size: 22px;">
+                                <div class="input-group-append">
+                                    <span class="glyphicon glyphicon-calendar input-group-text">
+                                        <i class="fa fa-percent" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 row-display form-group" style="padding-bottom: 0.5sem;">
+                        <div class="col-md-2">
+                            <label class="form-check-label"
+                                style="color: aliceblue; font-size: 20.1px; padding-left: 0.7em; padding-top: 0.27em;">Date
+                                Opened
+                            </label>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <input class="form-control bg-light" type="string" id="date" disabled
+                                    placeholder="Date opened" [value]="parsedDateOpened" style="font-size: 22px;">
+                                <div class="input-group-append">
+                                    <span class="glyphicon glyphicon-calendar input-group-text">
+                                        <i class="fas fa-calendar" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row" style="text-align: center; padding-left: 0.5em; padding-top: 6em;">
+                <form id="userForm" name="AccountForm" [formGroup]="depositMoneyForm"
+                    (ngSubmit)="depositMoneyFormSubmit()">
+                    <div class="col-md-12 row-display form-group">
+                        <div class="col-md-2">
+                            <label class="form-check-label"
+                                style="color: aliceblue; font-size: 20px; font-weight: bold;">Deposit
+                                funds</label><span class="pull-right"></span>
+                        </div>
+                        <div class="col-md-5" style="margin-bottom: 1em">
+                            <div class="input-group">
+                                <input class="form-control" type="number" id="amount" placeholder="Amount"
+                                    formControlName="amount" name="amount">
+                                <div class="input-group-append">
+                                    <span class="glyphicon glyphicon-calendar input-group-text">
+                                        <i class="fas fa-money-bill-wave" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-xs-4 ml-auto mr-auto" style="padding-right: 20em; padding-top: 1em;">
+                        <button class="btn btn-round btn-danger btn-block" [disabled]="!depositMoneyForm.valid"
+                            type="submit" style="font-size: 15px">Deposit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,97 @@
+<div class="wrapper">
+    <div class="main" class="page-header" style="background-image: url('./assets/img/wp6.jpeg')">
+        <div class="container" style="padding-bottom: 38em;">
+            <div class="header-margin"></div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="tim-title text-center">
+                        <h2 style="color: black; padding-bottom: 0.5em; font-size: 57px;">Transfer Money</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="text-align: center; padding-left: 5em; padding-top: 0.2em;">
+                <form id="userForm" name="AccountForm" [formGroup]="transferMoneyForm"
+                    (ngSubmit)="transferMoneyFormSubmit()">
+                    <div class="col-md-12 row-display form-group">
+                        <div class="col-md-2">
+                            <label class="form-check-label"
+                                style="color: aliceblue; font-size: 24px;">Recipient</label><span
+                                class="pull-right"></span>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="input-group">
+                                <input class="form-control" type="text" id="receiverIban" placeholder="Beneficiary"
+                                    formControlName="receiverIban" name="receiverIban">
+                                <div class="input-group-append">
+                                    <span class="glyphicon glyphicon-calendar input-group-text">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-12 row-display form-group">
+                        <div class="col-md-2">
+                            <label class="form-check-label"
+                                style="color: aliceblue; font-size: 24px;">Amount</label><span
+                                class="pull-right"></span>
+                        </div>
+                        <div class="col-md-7" style="margin-top: 0.5em">
+                            <div class="input-group">
+                                <input class="form-control" type="number" id="amount" placeholder="Amount"
+                                    formControlName="amount" name="amount">
+                                <div class="input-group-append">
+                                    <span class="glyphicon glyphicon-calendar input-group-text">
+                                        <i class="fa fa-money" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 row-display form-group">
+                        <div class="col-md-2">
+                            <label class="form-check-label"
+                                style="color: aliceblue; font-size: 24px;">Currency</label><span
+                                class="pull-right"></span>
+                        </div>
+                        <div class="col-md-7" style="margin-top: 0.5em">
+                            <div class="input-group">
+                                <input class="form-control" type="text" id="currency" placeholder="Currency"
+                                    formControlName="currency" name="currency">
+                                <div class="input-group-append">
+                                    <span class="glyphicon glyphicon-calendar input-group-text">
+                                        <i class="fa fa-dollar" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 row-display form-group">
+                        <div class="col-md-2">
+                            <label class="form-check-label"
+                                style="color: aliceblue; font-size: 24px;">Description</label><span
+                                class="pull-right"></span>
+                        </div>
+                        <div class="col-md-7" style="margin-top: 0.5em">
+                            <div class="input-group">
+                                <input class="form-control" type="text" id="description"
+                                    placeholder="Transaction Description" formControlName="description"
+                                    name="description">
+                                <div class="input-group-append">
+                                    <span class="glyphicon glyphicon-calendar input-group-text">
+                                        <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-xs-8 ml-auto mr-auto" style="padding-right: 8em; padding-top: 1.5em;">
+                        <button class="btn btn-round btn-danger btn-block" [disabled]="!transferMoneyForm.valid"
+                            type="submit" style="font-size: 16px">Transfer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

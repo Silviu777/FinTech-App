@@ -1,0 +1,109 @@
+<div class="wrapper">
+    <div class="page-header" style="background-image: url('./assets/img/sunset-city.jpeg');">
+        <div class="filter"></div>
+        <div class="container" style="padding-top: 3em">
+            <div class="row">
+
+                <div class="col-lg-8 col-sm-6 mr-auto ml-auto" style="padding-top: 1.5em;">
+                    <div class="card card-register">
+                        <h2 class="title" style="font-weight: bold; color: #E98039">Join us</h2>
+                        <div class="social-line text-center">
+                            <h5 style="font-weight: bold; color: wheat;">The New Paradigm of Banking</h5>
+                        </div>
+                        <form [formGroup]="registerForm" (ngSubmit)="submitForm()" style="margin-top:1.5em;">
+                            <div class="row">
+                                <div class="col-md-6 col-sd-12">
+                                    <label style="margin-left:7.7em;">First name</label>
+                                    <div class="input-group form-group-no-border"
+                                        style="text-align:right;margin-left:10.5em;">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="nc-icon nc-single-02"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="First name" id="firstName"
+                                            name="firstName" formControlName="firstName" [pattern]="firstNamePattern">
+                                    </div>
+                                    <label style="margin-left:7.7em;">Last name</label>
+                                    <div class="input-group form-group-no-border"
+                                        style="text-align:right;margin-left:10.5em;">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="nc-icon nc-single-02"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Last name" id="lastName"
+                                            name="lastName" formControlName="lastName" [pattern]="lastNamePattern">
+                                    </div>
+                                    <label style="margin-left:5.4em;">Email</label>
+                                    <div class="input-group form-group-no-border"
+                                        style="text-align:right;margin-left:10.5em;">
+
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="nc-icon nc-email-85"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Email" id="emailAddress"
+                                            name="emailAddress" formControlName="emailAddress"
+                                            [pattern]="emailAddressPattern">
+                                    </div>
+                                    <label style="margin-left:7.6em;">Username</label>
+                                    <div class="input-group form-group-no-border"
+                                        style="text-align:right;margin-left:10.5em;">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="nc-icon nc-single-02"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Username" id="username"
+                                            name="username" formControlName="username" [pattern]="usernamePattern">
+                                    </div>
+
+                                    <label style="margin-left:7.6em;">Password</label>
+                                    <div class="input-group form-group-no-border"
+                                        style="text-align:right;margin-left:10.5em;">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="nc-icon nc-key-25"></i>
+                                            </span>
+                                        </div>
+                                        <input type="password" class="form-control" placeholder="Password" id="password"
+                                            name="password" formControlName="password" [pattern]="passwordPattern">
+
+                                    </div>
+                                    <label style="margin-left:10em;">Phone number</label>
+                                    <div class="input-group form-group-no-border"
+                                        style="text-align:right;margin-left:10.5em;">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-phone"></i>
+                                            </span>
+                                        </div>
+                                        <input type="number" class="form-control" placeholder="Phone number"
+                                            id="phoneNumber" name="phoneNumber" formControlName="phoneNumber"
+                                            [pattern]="phoneNumberPattern">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5 ml-auto mr-auto" style="margin-top:2em;">
+                                <button type="submit"
+                                    class="signup btn btn-danger btn-block btn-round">Register</button>
+                                <div style="padding-left: 15px; padding-top: 1.1em;">
+                                    <span>Existing user? <a routerLink="/login">Log In</a></span>
+                                </div>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class=" row">
+                <p
+                    style="color: aliceblue; font-weight: bold; text-align:center; font-size: 14px; padding-left: 28.3em; padding-bottom: 8em;">
+                    © Copyright 2022 One FinTech. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</div>

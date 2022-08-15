@@ -1,0 +1,78 @@
+<div class="wrapper">
+    <div class="main" class="page-header"
+        style="background-image: url('./assets/img/wp10.jpeg'); padding-bottom: 17em;">
+        <div class="container">
+            <div class="header-margin"></div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="tim-title text-center">
+                        <h1 style="text-align: center; color:whitesmoke; font-size: 48px; padding-top: 0.7em;">
+                            Transaction
+                            Overview
+                        </h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row row-display" style="padding-bottom: 6em;">
+                <div class="col-md-2 text-right" style="margin-right: 100px;">
+                    <button class="btn btn-success btn-block" (click)="printTransactionHistoryPdf()">Save to
+                        PDF</button>
+                </div>
+                <div class="col-md-14" id="htmlData">
+                    <div class="table-responsive"
+                        style="backdrop-filter: blur(100px); background-color: rgb(110, 125, 140);opacity:1.1;">
+                        <table class=" table">
+                            <thead>
+                                <tr>
+                                    <th
+                                        style="text-align: center; color: #E0FFFF; padding-right: 1em; font-size: 19px;">
+                                        Transaction Id
+                                    </th>
+                                    <th
+                                        style="text-align: center; color: #E0FFFF; padding-right: 3em; padding-left: 4.5em; padding-right: 5em; font-size: 19px">
+                                        Transferred From</th>
+                                    <th
+                                        style="text-align: center;padding-right: 4em; color:	#E0FFFF; padding-left: 5.5em; padding-right: 4em; font-size: 19px">
+                                        Transferred
+                                        To
+                                    </th>
+                                    <th style="text-align: center; font-size: 19px; color:	#E0FFFF;">Transferred Amount
+                                    </th>
+                                    <th style="padding-left: 0.5em; font-size: 19px; color:	#E0FFFF;">Description</th>
+                                    <th
+                                        style="padding-left: 1.5em; padding-right: 1em ;font-size: 19px; color:#E0FFFF;">
+                                        Status</th>
+                                    <th style="text-align: center; font-size: 19px; color:	#E0FFFF;">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngFor="let transaction of transactions; index as i ">
+                                <tr>
+                                    <td
+                                        style="text-align: center; padding-right: 1em; color:aliceblue; font-size: 16.5px;">
+                                        {{transaction.id}}</td>
+                                    <td style=" text-align: center; color:white; font-size: 16px;">
+                                        {{transaction.sender}}</td>
+                                    <td style="text-align: center; color:#FBFBFD; font-size: 16px; ">
+                                        {{transaction.receiver}}</td>
+                                    <td
+                                        style="text-align: center; color:aliceblue; font-size: 18px; padding-left: 1em;">
+                                        {{transaction.amount}}</td>
+                                    <td
+                                        style="text-align: center; padding-left: 4em; padding-left: 0.3em;color:aliceblue; font-size: 16px">
+                                        {{transaction.description}}
+                                    </td>
+                                    <td
+                                        style="text-align: center; padding-right: 0.8em;color: #32CD32;font-weight: bold; font-size: 15px">
+                                        {{transaction.status}}</td>
+                                    <td style="text-align: center; color:aliceblue; font-size: 16px;">
+                                        {{formatDate(transaction.transactionDate)}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+.header-margin {
+    margin-top: 100px;
+}
+
+.row-display {
+    display: flex;
+}
+
+.card-button {
+    min-height: 150px;
+}
+
+.card {
+    background-color: #004f98;
+}
+
+/* #26619c, #035096, #004f98 -- good also */

@@ -1,0 +1,76 @@
+<div class="wrapper">
+    <div class="main" class="page-header" style="background-image: url('./assets/img/wp5.jpeg'); padding-bottom: 43em;">
+        <div class="container">
+            <div class="header-margin"></div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="tim-title text-center"
+                        style="text-align: center; color:whitesmoke;font-size: 24px; padding-top: 1em;">
+                        <h2>Profile</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-left: 5em; text-align: center;">
+                <form id="userForm" name="userForm">
+                    <div class="col-md-12 row-display form-group">
+                        <div class="col-md-2">
+                            <label class="form-check-label"
+                                style="color: white; font-size: 20px; padding-top: 0.4em;">First name
+                            </label><span class="pull-right">:</span>
+                        </div>
+                        <div class="col-md-5">
+                            <input class="form-control" type="text" id="firstName" placeholder="First name"
+                                [(ngModel)]="firstName" name="firstName" style="font-size: 21px;">
+                        </div>
+                    </div>
+                    <div class="col-md-12 row-display form-group">
+                        <div class="col-md-2">
+                            <label class="form-check-label"
+                                style="color: white; font-size: 20px; padding-top: 0.4em;">Last name
+                            </label><span class="pull-right">:</span>
+                        </div>
+                        <div class="col-md-5">
+                            <input class="form-control" type="text" id="lastName" placeholder="Last name"
+                                [(ngModel)]="lastName" name="lastName" style="font-size: 21px;">
+                        </div>
+                    </div>
+                    <div class="col-md-12 row-display form-group">
+                        <div class="col-md-2">
+                            <label class="form-check-label"
+                                style="color: white; font-size: 20px; padding-top: 0.4em;">Email </label><span
+                                class="pull-right">:</span>
+                        </div>
+                        <div class="col-md-5">
+                            <input class="form-control" type="email" id="email" placeholder="Email" [(ngModel)]="email"
+                                name="email" style="font-size: 21px;">
+                        </div>
+                    </div>
+                    <div class="col-md-12 row-display form-group">
+                        <div class="col-md-2">
+                            <label class="form-check-label"
+                                style="color: white; font-size: 20px; padding-top: 0.4em;">Username </label>
+                            <span class="pull-right">:</span>
+                        </div>
+                        <div class="col-md-5">
+                            <input class="form-control bg-light" type="text" id="username" placeholder="Username"
+                                disabled [value]="username" style="font-size: 21px;">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 row-display form-group">
+                        <div class="col-md-2">
+                            <label class="form-check-label"
+                                style="color: white; font-size: 18.8px; padding-top: 0.4em; display: inline-block;">Phone
+                                number
+                            </label><span class="pull-right">:</span>
+                        </div>
+                        <div class="col-md-5">
+                            <input class="form-control" type="text" id="phoneNumber" placeholder="Phone number"
+                                [(ngModel)]="phoneNumber" name="phoneNumber" style="font-size: 21px;">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
